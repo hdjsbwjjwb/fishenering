@@ -1,65 +1,74 @@
-<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#eee9df">
+  <meta name="theme-color" content="#11100e">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <title>FRISCHE NEHRUNG — Меню</title>
 
   <style>
     :root {
-      --page-bg: #eee9df;
-      --panel-bg: #e7e1d6;
-      --ink: #1d1b18;
-      --button-bg: rgba(24, 22, 19, 0.76);
-      --button-hover: rgba(24, 22, 19, 0.92);
-      --dot: rgba(29, 27, 24, 0.28);
-      --dot-active: rgba(29, 27, 24, 0.95);
+      --bg: #11100e;
+      --button: rgba(20, 19, 17, .78);
+      --button-hover: rgba(10, 9, 8, .94);
+      --glass: rgba(245, 241, 232, .78);
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html {
+    html,
+    body {
+      width: 100%;
+      height: 100%;
       margin: 0;
       padding: 0;
-      background: var(--page-bg);
-      scroll-behavior: smooth;
+      overflow: hidden;
+      overscroll-behavior: none;
+      background: var(--bg);
     }
 
     body {
-      margin: 0;
       min-width: 320px;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,.45), transparent 45%),
-        var(--page-bg);
-      color: var(--ink);
+      position: fixed;
+      inset: 0;
+      color: #fff;
       font-family: Arial, Helvetica, sans-serif;
-      overflow-x: hidden;
+      touch-action: none;
+    }
+
+    /* Затемнённый неподвижный фон */
+    .background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(75, 70, 62, .28), transparent 48%),
+        #11100e;
     }
 
     .carousel {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
       width: 100%;
-      min-height: 100vh;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(10px, 2vw, 24px);
+      padding: clamp(8px, 1.5vw, 20px);
     }
 
     .carousel__viewport {
       position: relative;
-      width: min(100%, 1100px);
-      height: min(94vh, 1100px);
+      width: min(100%, 1120px);
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border-radius: 6px;
     }
 
     .carousel__track {
@@ -99,10 +108,6 @@
       z-index: 1;
     }
 
-    .slide.is-before {
-      transform: translateX(-42px) scale(.985);
-    }
-
     .slide img {
       display: block;
       max-width: 100%;
@@ -111,32 +116,31 @@
       height: auto;
       object-fit: contain;
       border-radius: 2px;
-      box-shadow: 0 12px 36px rgba(0,0,0,.16);
+      box-shadow: 0 14px 45px rgba(0, 0, 0, .42);
       background: #fff;
       user-select: none;
       -webkit-user-drag: none;
+      cursor: zoom-in;
     }
 
     .arrow {
       position: absolute;
       top: 50%;
       z-index: 10;
-      width: clamp(42px, 4.4vw, 58px);
-      height: clamp(42px, 4.4vw, 58px);
+      width: clamp(44px, 4.4vw, 58px);
+      height: clamp(44px, 4.4vw, 58px);
       border: 0;
       border-radius: 50%;
       display: grid;
       place-items: center;
       transform: translateY(-50%);
-      background: var(--button-bg);
+      background: var(--button);
       color: #fff;
       cursor: pointer;
-      opacity: .92;
-      transition:
-        background .2s ease,
-        transform .2s ease,
-        opacity .2s ease;
+      opacity: .9;
+      transition: background .2s ease, transform .2s ease, opacity .2s ease;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .arrow:hover {
@@ -145,7 +149,7 @@
     }
 
     .arrow:active {
-      transform: translateY(-50%) scale(.94);
+      transform: translateY(-50%) scale(.93);
     }
 
     .arrow:focus-visible {
@@ -153,13 +157,8 @@
       outline-offset: 3px;
     }
 
-    .arrow--prev {
-      left: clamp(8px, 1.4vw, 20px);
-    }
-
-    .arrow--next {
-      right: clamp(8px, 1.4vw, 20px);
-    }
+    .arrow--prev { left: clamp(8px, 1.4vw, 20px); }
+    .arrow--next { right: clamp(8px, 1.4vw, 20px); }
 
     .arrow svg {
       width: 56%;
@@ -173,34 +172,32 @@
 
     .counter {
       position: absolute;
-      top: clamp(10px, 1.5vw, 20px);
+      top: max(12px, env(safe-area-inset-top));
       left: 50%;
       z-index: 10;
       transform: translateX(-50%);
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(255,255,255,.74);
+      background: rgba(0, 0, 0, .5);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       font-size: 12px;
       line-height: 1;
       letter-spacing: .08em;
-      color: rgba(29,27,24,.76);
+      color: rgba(255,255,255,.84);
     }
 
     .dots {
       position: absolute;
       left: 50%;
-      bottom: clamp(10px, 2vw, 20px);
+      bottom: max(14px, env(safe-area-inset-bottom));
       z-index: 10;
       transform: translateX(-50%);
       display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 9px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.72);
+      background: rgba(0,0,0,.5);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
@@ -211,46 +208,118 @@
       padding: 0;
       border: 0;
       border-radius: 50%;
-      background: var(--dot);
+      background: rgba(255,255,255,.35);
       cursor: pointer;
-      transition:
-        width .2s ease,
-        transform .2s ease,
-        background .2s ease;
+      transition: width .2s ease, background .2s ease;
+      touch-action: manipulation;
     }
 
     .dot.is-active {
       width: 22px;
       border-radius: 999px;
-      background: var(--dot-active);
+      background: rgba(255,255,255,.95);
     }
 
-    .hint {
+    /* Полноэкранный просмотр */
+    .viewer {
       position: fixed;
-      left: 50%;
-      bottom: 8px;
-      transform: translateX(-50%);
-      z-index: 20;
-      font-size: 11px;
-      color: rgba(29,27,24,.48);
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(5, 5, 4, .94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: opacity .4s ease;
+      transition: opacity .25s ease, visibility .25s ease;
+      touch-action: none;
     }
 
-    .hint.is-hidden {
-      opacity: 0;
+    .viewer.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .viewer__image-wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .viewer__image {
+      display: block;
+      max-width: 94vw;
+      max-height: 92vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      cursor: zoom-in;
+      transform: scale(1);
+      transition: transform .28s cubic-bezier(.22,.61,.36,1);
+      transform-origin: center center;
+    }
+
+    .viewer.is-zoomed .viewer__image {
+      transform: scale(2);
+      cursor: zoom-out;
+    }
+
+    .viewer__close {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 5;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,.58);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 300;
+      touch-action: manipulation;
+    }
+
+    .viewer__close:hover {
+      background: rgba(0,0,0,.82);
+    }
+
+    .viewer__hint {
+      position: absolute;
+      left: 50%;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.52);
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      white-space: nowrap;
+      pointer-events: none;
     }
 
     @media (max-width: 700px) {
       .carousel {
-        min-height: 100svh;
         padding: 0;
       }
 
       .carousel__viewport {
         width: 100%;
-        height: 100svh;
-        border-radius: 0;
+        height: 100%;
       }
 
       .slide {
@@ -259,40 +328,37 @@
 
       .slide img {
         max-width: 100vw;
-        max-height: 100svh;
+        max-height: 100vh;
         box-shadow: none;
       }
 
       .arrow {
-        background: rgba(24,22,19,.62);
+        background: rgba(0,0,0,.58);
       }
 
-      .arrow--prev {
-        left: 10px;
+      .arrow--prev { left: 10px; }
+      .arrow--next { right: 10px; }
+
+      .viewer {
+        padding: 0;
       }
 
-      .arrow--next {
-        right: 10px;
+      .viewer__image {
+        max-width: 100vw;
+        max-height: 100vh;
       }
 
-      .dots {
-        bottom: 20px;
-      }
-
-      .counter {
-        top: max(12px, env(safe-area-inset-top));
+      .viewer.is-zoomed .viewer__image {
+        transform: scale(2.2);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
       .slide,
+      .viewer,
+      .viewer__image,
       .arrow,
-      .dot,
-      .hint {
+      .dot {
         transition: none !important;
       }
     }
@@ -300,11 +366,15 @@
 </head>
 
 <body>
+  <div class="background" aria-hidden="true"></div>
+
   <main class="carousel" aria-label="Меню FRISCHE NEHRUNG">
     <section class="carousel__viewport" id="carousel">
-      <div class="counter" id="counter" aria-live="polite">1 / 4</div>
+
+      <div class="counter" id="counter">1 / 4</div>
 
       <div class="carousel__track">
+
         <figure class="slide is-active" data-index="0">
           <img src="01-bar.jpg" alt="Бар — лист 1" draggable="false">
         </figure>
@@ -320,6 +390,7 @@
         <figure class="slide" data-index="3">
           <img src="04-wines.jpg" alt="Вина — лист 2" draggable="false" loading="lazy">
         </figure>
+
       </div>
 
       <button class="arrow arrow--prev" id="prev" type="button" aria-label="Предыдущий лист">
@@ -334,16 +405,27 @@
         </svg>
       </button>
 
-      <div class="dots" id="dots" aria-label="Выбор листа меню">
-        <button class="dot is-active" type="button" aria-label="Лист 1" aria-current="true"></button>
+      <div class="dots" id="dots">
+        <button class="dot is-active" type="button" aria-label="Лист 1"></button>
         <button class="dot" type="button" aria-label="Лист 2"></button>
         <button class="dot" type="button" aria-label="Лист 3"></button>
         <button class="dot" type="button" aria-label="Лист 4"></button>
       </div>
+
     </section>
   </main>
 
-  <div class="hint" id="hint">← → или свайп</div>
+  <!-- Отдельный просмотр фотографии -->
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Просмотр листа меню">
+
+    <button class="viewer__close" id="viewerClose" type="button" aria-label="Закрыть">×</button>
+
+    <div class="viewer__image-wrap" id="viewerImageWrap">
+      <img class="viewer__image" id="viewerImage" src="" alt="" draggable="false">
+    </div>
+
+    <div class="viewer__hint">Двойной тап — увеличить / вернуть размер</div>
+  </div>
 
   <script>
     const slides = [...document.querySelectorAll('.slide')];
@@ -352,13 +434,21 @@
     const nextButton = document.getElementById('next');
     const counter = document.getElementById('counter');
     const carousel = document.getElementById('carousel');
-    const hint = document.getElementById('hint');
+
+    const viewer = document.getElementById('viewer');
+    const viewerImage = document.getElementById('viewerImage');
+    const viewerImageWrap = document.getElementById('viewerImageWrap');
+    const viewerClose = document.getElementById('viewerClose');
 
     let current = 0;
     let isAnimating = false;
+
     let startX = 0;
     let startY = 0;
     let moved = false;
+
+    let lastTap = 0;
+    let viewerZoomed = false;
 
     function updateSlide(nextIndex, direction = 1) {
       if (isAnimating || nextIndex === current) return;
@@ -369,10 +459,11 @@
       current = (nextIndex + slides.length) % slides.length;
 
       slides.forEach((slide, index) => {
-        slide.classList.remove('is-active', 'is-leaving', 'is-before');
+        slide.classList.remove('is-active', 'is-leaving');
 
         if (index === current) {
           slide.style.transform = `translateX(${direction * 42}px) scale(.985)`;
+
           requestAnimationFrame(() => {
             slide.classList.add('is-active');
             slide.style.transform = '';
@@ -380,15 +471,11 @@
         } else if (index === oldIndex) {
           slide.classList.add('is-leaving');
           slide.style.transform = `translateX(${-direction * 42}px) scale(.985)`;
-        } else if (index < current) {
-          slide.classList.add('is-before');
         }
       });
 
       dots.forEach((dot, index) => {
-        const active = index === current;
-        dot.classList.toggle('is-active', active);
-        dot.setAttribute('aria-current', active ? 'true' : 'false');
+        dot.classList.toggle('is-active', index === current);
       });
 
       counter.textContent = `${current + 1} / ${slides.length}`;
@@ -414,21 +501,27 @@
 
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
-        const direction = index > current ? 1 : -1;
-        updateSlide(index, direction);
+        updateSlide(index, index > current ? 1 : -1);
       });
     });
 
     document.addEventListener('keydown', (event) => {
+      if (viewer.classList.contains('is-open')) {
+        if (event.key === 'Escape') closeViewer();
+        return;
+      }
+
       if (event.key === 'ArrowRight') next();
       if (event.key === 'ArrowLeft') prev();
     });
 
+    /* Свайп по карусели */
     carousel.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('.arrow') || event.target.closest('.dots')) return;
+
       startX = event.clientX;
       startY = event.clientY;
       moved = false;
-      carousel.setPointerCapture?.(event.pointerId);
     });
 
     carousel.addEventListener('pointermove', (event) => {
@@ -443,16 +536,12 @@
     });
 
     carousel.addEventListener('pointerup', (event) => {
-      if (!moved) {
-        startX = 0;
-        startY = 0;
-        return;
-      }
+      if (!startX && !startY) return;
 
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
 
-      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+      if (moved && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
         if (dx < 0) next();
         else prev();
       }
@@ -462,25 +551,95 @@
       moved = false;
     });
 
-    let wheelLocked = false;
+    /* Открытие фотографии отдельно */
+    slides.forEach((slide) => {
+      const image = slide.querySelector('img');
 
-    carousel.addEventListener('wheel', (event) => {
-      if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
-      if (wheelLocked) return;
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openViewer(image);
+      });
 
-      wheelLocked = true;
+      image.addEventListener('pointerup', (event) => {
+        const now = Date.now();
 
-      if (event.deltaY > 0) next();
-      else prev();
+        if (now - lastTap < 320) {
+          event.preventDefault();
+          toggleViewerZoom();
+        }
 
-      setTimeout(() => {
-        wheelLocked = false;
-      }, 500);
-    }, { passive: true });
+        lastTap = now;
+      });
+    });
 
-    setTimeout(() => {
-      hint.classList.add('is-hidden');
-    }, 3500);
+    function openViewer(image) {
+      viewerImage.src = image.currentSrc || image.src;
+      viewerImage.alt = image.alt;
+      viewerZoomed = false;
+      viewer.classList.remove('is-zoomed');
+      viewer.classList.add('is-open');
+    }
+
+    function closeViewer() {
+      viewer.classList.remove('is-open');
+      viewer.classList.remove('is-zoomed');
+      viewerZoomed = false;
+    }
+
+    function toggleViewerZoom() {
+      if (!viewer.classList.contains('is-open')) return;
+
+      viewerZoomed = !viewerZoomed;
+      viewer.classList.toggle('is-zoomed', viewerZoomed);
+    }
+
+    viewerClose.addEventListener('click', closeViewer);
+
+    /* Клик по затемнению закрывает просмотр */
+    viewer.addEventListener('click', (event) => {
+      if (event.target === viewer || event.target === viewerImageWrap) {
+        closeViewer();
+      }
+    });
+
+    /* Двойной клик на ПК */
+    viewerImage.addEventListener('dblclick', (event) => {
+      event.preventDefault();
+      toggleViewerZoom();
+    });
+
+    /* Двойной тап непосредственно по большой фотографии */
+    let viewerLastTap = 0;
+
+    viewerImage.addEventListener('pointerup', (event) => {
+      const now = Date.now();
+
+      if (now - viewerLastTap < 350) {
+        event.preventDefault();
+        toggleViewerZoom();
+      }
+
+      viewerLastTap = now;
+    });
+
+    /* Внутри увеличенного изображения можно двигать пальцем/мышью.
+       При простом просмотре свайп закрывает окно. */
+    let viewerStartX = 0;
+    let viewerStartY = 0;
+
+    viewer.addEventListener('pointerdown', (event) => {
+      viewerStartX = event.clientX;
+      viewerStartY = event.clientY;
+    });
+
+    viewer.addEventListener('pointerup', (event) => {
+      const dx = event.clientX - viewerStartX;
+      const dy = event.clientY - viewerStartY;
+
+      if (!viewerZoomed && Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) {
+        closeViewer();
+      }
+    });
   </script>
 </body>
 </html>
