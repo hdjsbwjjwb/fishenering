@@ -2,85 +2,485 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#eee9df">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <title>FRISCHE NEHRUNG — Меню</title>
 
   <style>
+    :root {
+      --page-bg: #eee9df;
+      --panel-bg: #e7e1d6;
+      --ink: #1d1b18;
+      --button-bg: rgba(24, 22, 19, 0.76);
+      --button-hover: rgba(24, 22, 19, 0.92);
+      --dot: rgba(29, 27, 24, 0.28);
+      --dot-active: rgba(29, 27, 24, 0.95);
+    }
+
     * {
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html {
       margin: 0;
       padding: 0;
+      background: var(--page-bg);
+      scroll-behavior: smooth;
     }
 
     body {
-      background: #eee9df;
-      display: flex;
-      justify-content: center;
-      min-width: 320px;
-    }
-
-    main {
-      width: 100%;
-      max-width: 1000px;
-    }
-
-    .menu-page {
-      display: block;
-      width: 100%;
-      height: auto;
       margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.45), transparent 45%),
+        var(--page-bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
     }
 
-    @media (min-width: 1001px) {
-      main {
-        padding: 18px 0;
+    .carousel {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(10px, 2vw, 24px);
+    }
+
+    .carousel__viewport {
+      position: relative;
+      width: min(100%, 1100px);
+      height: min(94vh, 1100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 6px;
+    }
+
+    .carousel__track {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(4px, 1vw, 14px);
+      opacity: 0;
+      transform: translateX(42px) scale(.985);
+      pointer-events: none;
+      transition:
+        opacity .42s ease,
+        transform .42s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .slide.is-active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .slide.is-leaving {
+      opacity: 0;
+      transform: translateX(-42px) scale(.985);
+      z-index: 1;
+    }
+
+    .slide.is-before {
+      transform: translateX(-42px) scale(.985);
+    }
+
+    .slide img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 2px;
+      box-shadow: 0 12px 36px rgba(0,0,0,.16);
+      background: #fff;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      width: clamp(42px, 4.4vw, 58px);
+      height: clamp(42px, 4.4vw, 58px);
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      transform: translateY(-50%);
+      background: var(--button-bg);
+      color: #fff;
+      cursor: pointer;
+      opacity: .92;
+      transition:
+        background .2s ease,
+        transform .2s ease,
+        opacity .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .arrow:hover {
+      background: var(--button-hover);
+      opacity: 1;
+    }
+
+    .arrow:active {
+      transform: translateY(-50%) scale(.94);
+    }
+
+    .arrow:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+
+    .arrow--prev {
+      left: clamp(8px, 1.4vw, 20px);
+    }
+
+    .arrow--next {
+      right: clamp(8px, 1.4vw, 20px);
+    }
+
+    .arrow svg {
+      width: 56%;
+      height: 56%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .counter {
+      position: absolute;
+      top: clamp(10px, 1.5vw, 20px);
+      left: 50%;
+      z-index: 10;
+      transform: translateX(-50%);
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.74);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-size: 12px;
+      line-height: 1;
+      letter-spacing: .08em;
+      color: rgba(29,27,24,.76);
+    }
+
+    .dots {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(10px, 2vw, 20px);
+      z-index: 10;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: var(--dot);
+      cursor: pointer;
+      transition:
+        width .2s ease,
+        transform .2s ease,
+        background .2s ease;
+    }
+
+    .dot.is-active {
+      width: 22px;
+      border-radius: 999px;
+      background: var(--dot-active);
+    }
+
+    .hint {
+      position: fixed;
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-size: 11px;
+      color: rgba(29,27,24,.48);
+      pointer-events: none;
+      transition: opacity .4s ease;
+    }
+
+    .hint.is-hidden {
+      opacity: 0;
+    }
+
+    @media (max-width: 700px) {
+      .carousel {
+        min-height: 100svh;
+        padding: 0;
       }
 
-      .menu-page {
-        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.10);
-        margin-bottom: 18px;
+      .carousel__viewport {
+        width: 100%;
+        height: 100svh;
+        border-radius: 0;
+      }
+
+      .slide {
+        padding: 0;
+      }
+
+      .slide img {
+        max-width: 100vw;
+        max-height: 100svh;
+        box-shadow: none;
+      }
+
+      .arrow {
+        background: rgba(24,22,19,.62);
+      }
+
+      .arrow--prev {
+        left: 10px;
+      }
+
+      .arrow--next {
+        right: 10px;
+      }
+
+      .dots {
+        bottom: 20px;
+      }
+
+      .counter {
+        top: max(12px, env(safe-area-inset-top));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .slide,
+      .arrow,
+      .dot,
+      .hint {
+        transition: none !important;
       }
     }
   </style>
 </head>
 
 <body>
+  <main class="carousel" aria-label="Меню FRISCHE NEHRUNG">
+    <section class="carousel__viewport" id="carousel">
+      <div class="counter" id="counter" aria-live="polite">1 / 4</div>
 
-  <main>
+      <div class="carousel__track">
+        <figure class="slide is-active" data-index="0">
+          <img src="01-bar.jpg" alt="Бар — лист 1" draggable="false">
+        </figure>
 
-    <img
-      class="menu-page"
-      src="01-bar.jpg"
-      alt="Бар — лист 1"
-    >
+        <figure class="slide" data-index="1">
+          <img src="02-beer.jpg" alt="Пиво — лист 1" draggable="false" loading="lazy">
+        </figure>
 
-    <img
-      class="menu-page"
-      src="02-beer.jpg"
-      alt="Пиво — лист 1"
-      loading="lazy"
-    >
+        <figure class="slide" data-index="2">
+          <img src="03-wine-card.jpg" alt="Винная карта — лист 2" draggable="false" loading="lazy">
+        </figure>
 
-    <img
-      class="menu-page"
-      src="03-wine-card.jpg"
-      alt="Винная карта — лист 2"
-      loading="lazy"
-    >
+        <figure class="slide" data-index="3">
+          <img src="04-wines.jpg" alt="Вина — лист 2" draggable="false" loading="lazy">
+        </figure>
+      </div>
 
-    <img
-      class="menu-page"
-      src="04-wines.jpg"
-      alt="Вина — лист 2"
-      loading="lazy"
-    >
+      <button class="arrow arrow--prev" id="prev" type="button" aria-label="Предыдущий лист">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7"></path>
+        </svg>
+      </button>
 
+      <button class="arrow arrow--next" id="next" type="button" aria-label="Следующий лист">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <div class="dots" id="dots" aria-label="Выбор листа меню">
+        <button class="dot is-active" type="button" aria-label="Лист 1" aria-current="true"></button>
+        <button class="dot" type="button" aria-label="Лист 2"></button>
+        <button class="dot" type="button" aria-label="Лист 3"></button>
+        <button class="dot" type="button" aria-label="Лист 4"></button>
+      </div>
+    </section>
   </main>
 
+  <div class="hint" id="hint">← → или свайп</div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = [...document.querySelectorAll('.dot')];
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const carousel = document.getElementById('carousel');
+    const hint = document.getElementById('hint');
+
+    let current = 0;
+    let isAnimating = false;
+    let startX = 0;
+    let startY = 0;
+    let moved = false;
+
+    function updateSlide(nextIndex, direction = 1) {
+      if (isAnimating || nextIndex === current) return;
+
+      isAnimating = true;
+
+      const oldIndex = current;
+      current = (nextIndex + slides.length) % slides.length;
+
+      slides.forEach((slide, index) => {
+        slide.classList.remove('is-active', 'is-leaving', 'is-before');
+
+        if (index === current) {
+          slide.style.transform = `translateX(${direction * 42}px) scale(.985)`;
+          requestAnimationFrame(() => {
+            slide.classList.add('is-active');
+            slide.style.transform = '';
+          });
+        } else if (index === oldIndex) {
+          slide.classList.add('is-leaving');
+          slide.style.transform = `translateX(${-direction * 42}px) scale(.985)`;
+        } else if (index < current) {
+          slide.classList.add('is-before');
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        const active = index === current;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+
+      counter.textContent = `${current + 1} / ${slides.length}`;
+
+      setTimeout(() => {
+        slides.forEach(slide => {
+          slide.style.transform = '';
+        });
+        isAnimating = false;
+      }, 460);
+    }
+
+    function next() {
+      updateSlide(current + 1, 1);
+    }
+
+    function prev() {
+      updateSlide(current - 1, -1);
+    }
+
+    nextButton.addEventListener('click', next);
+    prevButton.addEventListener('click', prev);
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        const direction = index > current ? 1 : -1;
+        updateSlide(index, direction);
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') next();
+      if (event.key === 'ArrowLeft') prev();
+    });
+
+    carousel.addEventListener('pointerdown', (event) => {
+      startX = event.clientX;
+      startY = event.clientY;
+      moved = false;
+      carousel.setPointerCapture?.(event.pointerId);
+    });
+
+    carousel.addEventListener('pointermove', (event) => {
+      if (!startX && !startY) return;
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        moved = true;
+      }
+    });
+
+    carousel.addEventListener('pointerup', (event) => {
+      if (!moved) {
+        startX = 0;
+        startY = 0;
+        return;
+      }
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) next();
+        else prev();
+      }
+
+      startX = 0;
+      startY = 0;
+      moved = false;
+    });
+
+    let wheelLocked = false;
+
+    carousel.addEventListener('wheel', (event) => {
+      if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) return;
+      if (wheelLocked) return;
+
+      wheelLocked = true;
+
+      if (event.deltaY > 0) next();
+      else prev();
+
+      setTimeout(() => {
+        wheelLocked = false;
+      }, 500);
+    }, { passive: true });
+
+    setTimeout(() => {
+      hint.classList.add('is-hidden');
+    }, 3500);
+  </script>
 </body>
 </html>
