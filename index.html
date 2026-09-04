@@ -170,8 +170,6 @@
   .item-tag{font-size:12.5px; font-style:italic; color:var(--cream-dim); margin-left:2px;}
   .item-desc{font-size:12.5px; font-style:italic; color:var(--cream-faint); margin-top:2px; line-height:1.3;}
 
-  .item-leader{flex:1 1 auto; border-bottom:1px dotted var(--brass-dim); opacity:.45; margin:0 2px 5px; min-width:10px;}
-
   .price-single{
     flex:0 0 auto; font-size:16px; color:var(--brass-soft);
     font-variant-numeric:tabular-nums; white-space:nowrap; padding-top:1px;
@@ -466,10 +464,15 @@ const MENU = [
       { title:'Молочный коктейль', groups:[ { items:[
         {name:'Молочный коктейль', tag:'ваниль / шоколад / банан / клубника', variants:[{label:'300мл',price:230}]},
       ]} ]},
+      { title:'Вода', groups:[ { items:[
+        {name:'Тасай', tag:'1л', variants:[{price:140}]},
+        {name:'Тасай', tag:'стекло', variants:[{price:150}]},
+        {name:'Тасай', tag:'лимон', variants:[{price:150}]},
+      ]} ]},
     ]
   },
   {
-    id:'hot', label:'Чай и вода',
+    id:'hot', label:'Горячие напитки',
     sections:[
       { title:'Горячие напитки', groups:[ { items:[
         {name:'Горячий шоколад', variants:[{price:80}]},
@@ -482,11 +485,6 @@ const MENU = [
         {name:'Иван-чай', variants:[{price:180}]},
         {name:'Чай травяной', variants:[{price:250}]},
         {name:'Облепиховый чай', variants:[{price:250}]},
-      ]} ]},
-      { title:'Вода', groups:[ { items:[
-        {name:'Тасай', tag:'1л', variants:[{price:140}]},
-        {name:'Тасай', tag:'стекло', variants:[{price:150}]},
-        {name:'Тасай', tag:'лимон', variants:[{price:150}]},
       ]} ]},
     ]
   },
@@ -525,9 +523,6 @@ const MENU = [
     row.appendChild(main);
 
     if (item.variants.length <= 1){
-      const leader = document.createElement('div');
-      leader.className = 'item-leader';
-      row.appendChild(leader);
       const price = document.createElement('div');
       price.className = 'price-single';
       price.textContent = fmt(item.variants[0].price);
