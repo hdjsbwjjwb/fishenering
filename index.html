@@ -6,243 +6,196 @@
 <title>Frische Nehrung — Меню</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#0e0a07;
-    --panel:#1c150e;
+    --panel:#171009;
+    --panel-2:#1d1610;
     --brass:#c9a24b;
     --brass-soft:#d9bd7c;
     --brass-dim:#6e5a34;
+    --brass-faint:#3a2f1c;
     --wine:#6e1f2e;
     --cream:#efe3cb;
     --cream-dim:#a3937a;
+    --cream-faint:#786a54;
+    --header-h:64px;
+    --tabbar-h:52px;
   }
 
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{
-    height:100%;
-    margin:0;
-    background:var(--void);
-    overflow:hidden;
-    overscroll-behavior:none;
-  }
+  html,body{height:100%; margin:0; background:var(--void); overscroll-behavior:none;}
   body{
     font-family:'Cormorant Garamond', Georgia, serif;
     color:var(--cream);
     position:relative;
+    -webkit-font-smoothing:antialiased;
   }
 
-  .grain{
-    position:fixed; inset:0;
-    pointer-events:none;
-    background-image:radial-gradient(circle at 1px 1px, rgba(239,227,203,0.035) 1px, transparent 0);
-    background-size:3px 3px;
-    z-index:1;
-  }
-
-  .stage{
-    position:relative;
+  .app{
     height:100dvh;
     width:100vw;
     display:flex;
     flex-direction:column;
+    position:relative;
     opacity:0;
-    animation:riseIn .9s cubic-bezier(.2,.8,.2,1) .1s forwards;
+    animation:riseIn .8s cubic-bezier(.2,.8,.2,1) .05s forwards;
   }
-  @keyframes riseIn{
-    from{opacity:0; transform:translateY(14px);}
-    to{opacity:1; transform:translateY(0);}
-  }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
   .glow{
-    position:absolute; inset:0;
-    pointer-events:none;
+    position:fixed; inset:0; pointer-events:none; z-index:0;
     background:
-      radial-gradient(ellipse 60% 50% at 50% 42%, rgba(201,162,75,0.12), transparent 62%),
-      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(110,31,46,0.16), transparent 70%);
-    z-index:0;
+      radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201,162,75,.10), transparent 60%),
+      radial-gradient(ellipse 80% 35% at 50% 100%, rgba(110,31,46,.14), transparent 70%);
   }
 
-  .topbar{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    padding:calc(env(safe-area-inset-top,0px) + 18px) 16px 10px;
+  /* header */
+  header.top{
+    position:relative; z-index:3;
     flex-shrink:0;
+    text-align:center;
+    padding:calc(env(safe-area-inset-top,0px) + 14px) 12px 8px;
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-  }
-  .brand-mark{
-    color:var(--brass);
-    font-size:14px;
-    opacity:.85;
-  }
-  .topbar h1{
-    margin:0;
-    font-family:'UnifrakturCook', cursive;
-    font-weight:700;
-    font-size:clamp(26px, 8vw, 40px);
-    letter-spacing:.5px;
-    color:var(--brass-soft);
-    text-shadow:0 0 24px rgba(201,162,75,.25);
-    line-height:1;
+  .brand{display:flex; align-items:center; justify-content:center; gap:8px;}
+  .brand-mark{color:var(--brass); font-size:11px; opacity:.8;}
+  header.top h1{
+    margin:0; font-family:'UnifrakturCook', cursive; font-weight:700;
+    font-size:clamp(22px,7vw,30px); letter-spacing:.5px; color:var(--brass-soft);
+    text-shadow:0 0 18px rgba(201,162,75,.22); line-height:1;
   }
   .subtitle{
-    margin:8px 0 0;
-    font-size:12px;
-    letter-spacing:.32em;
-    text-transform:uppercase;
-    color:var(--cream-dim);
-    font-style:italic;
-    font-weight:500;
+    margin:5px 0 0; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--cream-dim); font-style:italic; font-weight:500;
   }
 
+  /* tabbar */
+  .tabbar{
+    position:relative; z-index:3; flex-shrink:0;
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+    padding:10px 14px; border-top:1px solid var(--brass-faint); border-bottom:1px solid var(--brass-faint);
+    background:linear-gradient(180deg, rgba(23,16,9,.6), rgba(23,16,9,.3));
+  }
+  .tabbar::-webkit-scrollbar{display:none;}
+  .tab-chip{
+    flex:0 0 auto;
+    font-family:'Cormorant Garamond', serif;
+    font-size:14.5px; font-weight:600; letter-spacing:.03em;
+    color:var(--cream-dim);
+    background:transparent;
+    border:1px solid var(--brass-faint);
+    border-radius:999px;
+    padding:7px 15px;
+    cursor:pointer;
+    transition:all .3s ease;
+    white-space:nowrap;
+  }
+  .tab-chip.active{
+    color:var(--void);
+    background:var(--brass-soft);
+    border-color:var(--brass-soft);
+    box-shadow:0 0 14px rgba(201,162,75,.35);
+  }
+
+  /* deck of panels */
   .deck{
-    position:relative;
-    z-index:2;
-    flex:1;
-    display:flex;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    perspective:1600px;
-    min-height:0;
+    flex:1; min-height:0; position:relative; z-index:2;
+    display:flex; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
   }
   .deck::-webkit-scrollbar{display:none;}
-  .deck{scrollbar-width:none;}
 
-  .page{
-    flex:0 0 100vw;
-    scroll-snap-align:center;
-    scroll-snap-stop:always;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:6px 20px;
-  }
-  .page img{
-    max-height:74dvh;
-    max-width:88vw;
-    width:auto;
-    height:auto;
-    object-fit:contain;
-    border-radius:5px;
-    box-shadow:
-      0 30px 70px -18px rgba(0,0,0,.75),
-      0 0 0 1px rgba(201,162,75,.18);
-    will-change:transform, opacity;
-    transform-origin:center center;
-    user-select:none;
-    pointer-events:none;
+  .panel{
+    flex:0 0 100vw; scroll-snap-align:center; scroll-snap-stop:always;
+    height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:0 0 40px;
   }
 
-  .side-arrow{
-    position:fixed;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:3;
-    width:42px; height:42px;
-    border-radius:50%;
-    border:1px solid var(--brass-dim);
-    background:rgba(20,15,10,.45);
-    backdrop-filter:blur(6px);
+  .tab-note{
+    font-size:11.5px; font-style:italic; color:var(--cream-faint);
+    text-align:center; padding:12px 20px 2px; letter-spacing:.02em;
+  }
+
+  /* sub nav (sections within a panel) */
+  .subbar{
+    position:sticky; top:0; z-index:2;
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+    padding:10px 14px; margin-top:4px;
+    background:linear-gradient(180deg, var(--void) 70%, transparent);
+  }
+  .subbar::-webkit-scrollbar{display:none;}
+  .sub-chip{
+    flex:0 0 auto;
+    font-family:'Cormorant Garamond', serif;
+    font-size:12.5px; font-style:italic; letter-spacing:.03em;
+    color:var(--brass-dim);
+    background:var(--panel);
+    border:1px solid var(--brass-faint);
+    border-radius:999px;
+    padding:5px 13px;
+    cursor:pointer;
+    transition:all .25s ease;
+    white-space:nowrap;
+  }
+  .sub-chip.active{
     color:var(--brass-soft);
-    font-size:20px;
-    font-family:Georgia, serif;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:opacity .25s ease, border-color .25s ease, transform .2s ease;
-    opacity:.55;
-  }
-  .side-arrow:hover{opacity:1; border-color:var(--brass);}
-  .side-arrow:active{transform:translateY(-50%) scale(.92);}
-  .side-arrow:disabled{opacity:.15; pointer-events:none;}
-  .side-arrow.prev{left:calc(env(safe-area-inset-left,0px) + 10px);}
-  .side-arrow.next{right:calc(env(safe-area-inset-right,0px) + 10px);}
-  @media (max-width:420px){
-    .side-arrow{width:36px; height:36px; font-size:17px;}
-  }
-
-  .bottom-bar{
-    position:relative;
-    z-index:2;
-    flex-shrink:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    padding:6px 16px calc(env(safe-area-inset-bottom,0px) + 18px);
-  }
-  .dots{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .dot{
-    width:7px; height:7px;
-    border-radius:50%;
-    border:1px solid var(--brass-dim);
-    background:transparent;
-    padding:0;
-    cursor:pointer;
-    transition:all .35s cubic-bezier(.2,.8,.2,1);
-  }
-  .dot.active{
-    width:22px;
-    border-radius:5px;
-    background:var(--brass);
     border-color:var(--brass);
-    box-shadow:0 0 10px rgba(201,162,75,.55);
-  }
-  .counter{
-    font-size:11px;
-    letter-spacing:.3em;
-    color:var(--cream-dim);
-    font-style:italic;
-  }
-  .counter b{color:var(--brass-soft); font-style:normal;}
-
-  .hint{
-    position:absolute;
-    bottom:calc(env(safe-area-inset-bottom,0px) + 56px);
-    left:0; right:0;
-    text-align:center;
-    z-index:2;
-    font-size:12px;
-    letter-spacing:.28em;
-    text-transform:uppercase;
-    color:var(--cream-dim);
-    opacity:.75;
-    pointer-events:none;
-    animation:driftHint 2.6s ease-in-out infinite;
-  }
-  .hint.hidden{opacity:0; transition:opacity .6s ease;}
-  @keyframes driftHint{
-    0%,100%{transform:translateX(0);}
-    50%{transform:translateX(5px);}
+    background:var(--panel-2);
   }
 
-  @media (prefers-reduced-motion: reduce){
-    .stage{animation:none; opacity:1;}
-    .hint{animation:none;}
-    .page img{transition:none !important;}
+  section.menu-section{ padding:2px 0 6px; scroll-margin-top:64px; }
+  .section-title{
+    font-size:12px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--brass); text-align:center; margin:18px 0 4px;
+    font-style:normal; font-weight:600;
+  }
+
+  .group-label{
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--cream-dim); text-align:left; margin:16px 20px 6px;
+    border-bottom:1px solid var(--brass-faint); padding-bottom:5px;
+  }
+
+  .items{ padding:0 18px; }
+  .item-row{
+    display:flex; align-items:flex-start; gap:8px;
+    padding:9px 2px;
+    border-bottom:1px solid rgba(110,90,52,.18);
+  }
+  .item-row:last-child{border-bottom:none;}
+  .item-main{flex:1 1 auto; min-width:0;}
+  .item-name{font-size:16.5px; color:var(--cream); line-height:1.25;}
+  .item-tag{font-size:12.5px; font-style:italic; color:var(--cream-dim); margin-left:2px;}
+  .item-desc{font-size:12.5px; font-style:italic; color:var(--cream-faint); margin-top:2px; line-height:1.3;}
+
+  .item-leader{flex:1 1 auto; border-bottom:1px dotted var(--brass-dim); opacity:.45; margin:0 2px 5px; min-width:10px;}
+
+  .price-single{
+    flex:0 0 auto; font-size:16px; color:var(--brass-soft);
+    font-variant-numeric:tabular-nums; white-space:nowrap; padding-top:1px;
+  }
+  .price-stack{flex:0 0 auto; text-align:right;}
+  .price-line{
+    display:flex; align-items:baseline; justify-content:flex-end; gap:6px;
+    font-size:13.5px; color:var(--brass-soft); white-space:nowrap;
+  }
+  .price-line .vol{font-size:11px; font-style:italic; color:var(--cream-faint);}
+  .price-line + .price-line{margin-top:2px;}
+
+  @media (prefers-reduced-motion: reduce){ .app{animation:none; opacity:1;} }
+
+  @media (min-width:720px){
+    .panel{max-width:640px; margin:0 auto;}
+    header.top h1{font-size:32px;}
   }
 </style>
 </head>
 <body>
-  <div class="grain"></div>
-  <div class="stage">
-    <div class="glow"></div>
-
-    <header class="topbar">
+  <div class="glow"></div>
+  <div class="app">
+    <header class="top">
       <div class="brand">
         <span class="brand-mark">✦</span>
         <h1>Frische Nehrung</h1>
@@ -251,127 +204,498 @@
       <p class="subtitle">Меню · Балтийская коса</p>
     </header>
 
-    <button class="side-arrow prev" id="prev" aria-label="Предыдущая страница">‹</button>
-    <button class="side-arrow next" id="next" aria-label="Следующая страница">›</button>
-
-    <div class="deck" id="deck">
-      <div class="page"><img src="01-bar.jpg" alt="Барная карта: виски, ром, водка, джин, текила, абсент, коктейли" draggable="false"></div>
-      <div class="page"><img src="02-beer.jpg" alt="Пивная карта: разливное и бутылочное пиво, сидр, закуски, напитки" draggable="false"></div>
-      <div class="page"><img src="03-wine-card.jpg" alt="Винная карта — титульная страница" draggable="false"></div>
-      <div class="page"><img src="04-wines.jpg" alt="Винная карта: белые, красные и игристые вина" draggable="false"></div>
-    </div>
-
-    <p class="hint" id="hint">← свайпните, чтобы листать →</p>
-
-    <div class="bottom-bar">
-      <div class="dots" id="dots"></div>
-      <div class="counter" id="counter">01 / 04</div>
-    </div>
+    <nav class="tabbar" id="tabbar"></nav>
+    <div class="deck" id="deck"></div>
   </div>
 
 <script>
+/* ============ ДАННЫЕ МЕНЮ ============
+   Чтобы изменить цену/позицию — редактируйте здесь, вёрстка обновится сама.
+   variants: [{label, price}] — label необязателен (объём/тип), при одном
+   варианте с пустым label цена выводится одной строкой.
+*/
+const MENU = [
+  {
+    id:'beer', label:'Пиво',
+    sections:[
+      { title:'Разливное', groups:[ { items:[
+        {name:'Домашнее светлое', tag:'фильтр.', variants:[{label:'0,3л',price:102},{label:'0,5л',price:170}]},
+        {name:'Варница светлое', tag:'нефильтр.', variants:[{label:'0,3л',price:105},{label:'0,5л',price:175}]},
+        {name:'Варница бархатное', tag:'тёмное, фильтр.', variants:[{label:'0,3л',price:110},{label:'0,5л',price:180}]},
+        {name:'Биржалис баварское', tag:'светлое, фильтр.', variants:[{label:'0,3л',price:117},{label:'0,5л',price:195}]},
+      ]} ]},
+      { title:'Бутылочное', groups:[ { items:[
+        {name:'Жигулёвское', tag:'светлое, фильтр.', variants:[{price:145}]},
+        {name:'Клаустер Ориджинал', tag:'б/а', variants:[{price:220}]},
+        {name:'Карлова Крчма премиум', tag:'светлое, фильтр.', variants:[{price:270}]},
+        {name:'Карлова Крчма', tag:'светлое, фильтр.', variants:[{price:270}]},
+        {name:'Ориджинал Оттингер Шварц', tag:'тёмное, фильтр.', variants:[{price:270}]},
+        {name:'Ориджинал Оттингер Вайзбир', tag:'пшеничное, нефильтр.', variants:[{price:270}]},
+        {name:'Падерборнер Пилснер', tag:'светлое, фильтр.', variants:[{price:270}]},
+        {name:'Падерборнер Экспорт', tag:'светлое, фильтр.', variants:[{price:270}]},
+        {name:'Биржалис красное', variants:[{price:270}]},
+        {name:'Биржалис светлое', variants:[{price:270}]},
+      ]} ]},
+      { title:'Сидр', groups:[ { items:[
+        {name:'Сидр Дабл Три', variants:[{price:270}]},
+      ]} ]},
+    ]
+  },
+  {
+    id:'wine', label:'Вино',
+    note:'Цены указаны за бокал 150мл / бутылку',
+    sections:[
+      { title:'Белое', groups:[
+        {label:'Россия', items:[
+          {name:'Шато Де Талю Совиньон Блан Резерв', tag:'сухое', variants:[{label:'бокал',price:990},{label:'бутылка',price:4500}]},
+          {name:'Шато Де Талю Шардоне Резерв', tag:'сухое', variants:[{label:'бокал',price:990},{label:'бутылка',price:4500}]},
+        ]},
+        {label:'Германия', items:[
+          {name:'Хербликс Гевюрцтрейминер', tag:'полусладкое', variants:[{label:'бокал',price:395},{label:'бутылка',price:1800}]},
+          {name:'Жозеф Хандлер Рислинг', tag:'полусладкое', variants:[{label:'бокал',price:485},{label:'бутылка',price:2200}]},
+        ]},
+        {label:'Испания', items:[
+          {name:'Кардинал Эспаньол', tag:'сухое', variants:[{label:'бокал',price:330},{label:'бутылка',price:1500}]},
+        ]},
+        {label:'Италия', items:[
+          {name:'Траттория Италиана Пино Гриджио делле Венеции', tag:'сухое', variants:[{label:'бокал',price:360},{label:'бутылка',price:1600}]},
+          {name:'Радизе Просекко', tag:'брют', variants:[{label:'бокал',price:420},{label:'бутылка',price:2100}]},
+          {name:'Асоло Просекко', tag:'брют', variants:[{label:'бокал',price:580},{label:'бутылка',price:2670}]},
+          {name:'Мартини Асти', tag:'сладкое', variants:[{label:'бокал',price:960},{label:'бутылка',price:4350}]},
+        ]},
+        {label:'Новая Зеландия', items:[
+          {name:'Ант Мур Пино Гри', tag:'сухое', variants:[{label:'бокал',price:430},{label:'бутылка',price:1950}]},
+          {name:'Вай Вай Пино Гри', tag:'сухое', variants:[{label:'бокал',price:430},{label:'бутылка',price:1950}]},
+          {name:'Киви Айленд Совиньон Блан', tag:'сухое', variants:[{label:'бокал',price:645},{label:'бутылка',price:2925}]},
+        ]},
+        {label:'Сербия', items:[
+          {name:'Винокалем Рислинг', tag:'сухое', variants:[{label:'бокал',price:305},{label:'бутылка',price:1400}]},
+        ]},
+        {label:'ЮАР', items:[
+          {name:'Стоуни Кейп Пино Гриджио', tag:'сухое', variants:[{label:'бокал',price:400},{label:'бутылка',price:1800}]},
+        ]},
+        {label:'Чили', items:[
+          {name:'Сильвер Гост Совиньон Блан', tag:'сухое', variants:[{label:'бокал',price:375},{label:'бутылка',price:1795}]},
+        ]},
+        {label:null, items:[
+          {name:'Игристое вино', tag:'бокал 0,2л', variants:[{price:525}]},
+        ]},
+      ]},
+      { title:'Красное', groups:[
+        {label:'Россия', items:[
+          {name:'Буссо Розовое', tag:'полусладкое', variants:[{label:'бокал',price:170},{label:'бутылка',price:750}]},
+          {name:'Гранд Резерв Каберне Фран', tag:'сухое', variants:[{label:'бокал',price:175},{label:'бутылка',price:800}]},
+          {name:'Шато Де Талю Каберне Фран Резерв', tag:'сухое', variants:[{label:'бокал',price:990},{label:'бутылка',price:4500}]},
+          {name:'Шато Де Талю Красностоп', tag:'сухое', variants:[{label:'бокал',price:990},{label:'бутылка',price:4500}]},
+        ]},
+        {label:'Франция', items:[
+          {name:'Луи Монте', tag:'полусладкое', variants:[{label:'бокал',price:260},{label:'бутылка',price:1200}]},
+          {name:'Биг Каберне Совиньон', tag:'сухое', variants:[{label:'бокал',price:295},{label:'бутылка',price:1350}]},
+          {name:'Биг Кюве Спешиаль', tag:'сухое', variants:[{label:'бокал',price:395},{label:'бутылка',price:1800}]},
+          {name:'Биг Партаже', tag:'сухое', variants:[{label:'бокал',price:410},{label:'бутылка',price:1865}]},
+          {name:'Ле Крокан Мальбек', tag:'сухое', variants:[{label:'бокал',price:420},{label:'бутылка',price:1900}]},
+        ]},
+        {label:'Грузия', items:[
+          {name:'Киндзмараули Оригинал', tag:'полусладкое', variants:[{label:'бокал',price:400},{label:'бутылка',price:2000}]},
+        ]},
+        {label:'Италия', items:[
+          {name:'Фонтелла Санджовезе Тоскана', tag:'сухое', variants:[{label:'бокал',price:450},{label:'бутылка',price:2050}]},
+        ]},
+      ]},
+      { title:'Игристое', groups:[
+        {label:'Россия', items:[
+          {name:'Дербентское', tag:'полусладкое', variants:[{label:'бокал',price:160},{label:'бутылка',price:710}]},
+          {name:'Абрау-Дюрсо', tag:'брют', variants:[{label:'бокал',price:285},{label:'бутылка',price:1275}]},
+          {name:'Ла Петит Перле', tag:'полусладкое', variants:[{label:'бокал',price:300},{label:'бутылка',price:1350}]},
+          {name:'Ла Петит Перле', tag:'брют', variants:[{label:'бокал',price:300},{label:'бутылка',price:1350}]},
+          {name:'Шато Шуго', tag:'сладкое', variants:[{label:'бокал',price:300},{label:'бутылка',price:1350}]},
+          {name:'Шато Шуго', tag:'брют', variants:[{label:'бокал',price:300},{label:'бутылка',price:1350}]},
+        ]},
+        {label:'Франция', items:[
+          {name:'Людовик XIV', tag:'полусладкое', variants:[{label:'бокал',price:295},{label:'бутылка',price:1325}]},
+          {name:'Биг Блан де Блан', tag:'брют', variants:[{label:'бокал',price:305},{label:'бутылка',price:1350}]},
+        ]},
+        {label:'Испания', items:[
+          {name:'Кава Брют Вилла Кончи', tag:'брют', variants:[{label:'бокал',price:666},{label:'бутылка',price:3000}]},
+        ]},
+      ]},
+    ]
+  },
+  {
+    id:'spirits', label:'Крепкий алкоголь',
+    note:'Цены указаны за 50мл',
+    sections:[
+      { title:'Виски', groups:[
+        {label:'США', items:[
+          {name:'Билли Бонг', variants:[{price:305}]},
+          {name:'Джим Бим', variants:[{price:395}]},
+          {name:'Джек Дэниэлс', variants:[{price:495}]},
+        ]},
+        {label:'Шотландия', items:[
+          {name:'Вильям Лоусонс', variants:[{price:290}]},
+          {name:'Дюарс', variants:[{price:380}]},
+          {name:'Роберт Бёрнс', variants:[{price:385}]},
+          {name:'Балантайс', variants:[{price:480}]},
+        ]},
+        {label:'Ирландия', items:[
+          {name:'Джемесон', variants:[{price:595}]},
+        ]},
+      ]},
+      { title:'Коньяк', groups:[ { items:[
+        {name:'Достоевский', variants:[{price:195}]},
+        {name:'Дудук', variants:[{price:195}]},
+        {name:'Старый Кёнигсберг', tag:'4 года', variants:[{price:285}]},
+        {name:'Старый Кёнигсберг', tag:'5 лет', variants:[{price:295}]},
+        {name:'Старый Кёнигсберг КВ', tag:'7 лет', variants:[{price:550}]},
+        {name:'Арарат', tag:'5 лет', variants:[{price:380}]},
+        {name:'Мартель ВС', variants:[{price:635}]},
+        {name:'Старый Кёнигсберг ХО', variants:[{price:750}]},
+      ]} ]},
+      { title:'Ром', groups:[ { items:[
+        {name:'Мама Джама', tag:'блэк / голд', variants:[{price:195}]},
+        {name:'Бакарди', variants:[{label:'Carta',price:280},{label:'Спайд',price:370}]},
+        {name:'Капитан Морган', tag:'в асс.', variants:[{price:340}]},
+        {name:'Рон Варадеро', variants:[{price:370}]},
+        {name:'Барсело', variants:[{label:'Дорадо',price:375},{label:'Бланко',price:375}]},
+        {name:'Клуб Аньехо', tag:'3 года', variants:[{price:385}]},
+      ]} ]},
+      { title:'Водка', groups:[ { items:[
+        {name:'Белорусская река', variants:[{price:100}]},
+        {name:'Парадигма', variants:[{price:130}]},
+        {name:'Русский стандарт', variants:[{price:125}]},
+        {name:'Тундра', variants:[{price:125}]},
+        {name:'Белая берёза', variants:[{price:140}]},
+        {name:'Хаски', variants:[{price:150}]},
+        {name:'Нева', variants:[{price:160}]},
+        {name:'Белуга', variants:[{price:300}]},
+      ]} ]},
+      { title:'Джин', groups:[ { items:[
+        {name:'Фримен Пинк', variants:[{price:115}]},
+        {name:'Тенжаку', variants:[{price:480}]},
+        {name:'Бифитер', variants:[{price:480}]},
+        {name:'Антидот оранж', variants:[{price:640}]},
+      ]} ]},
+      { title:'Текила', groups:[ { items:[
+        {name:'Ольмека золотая', variants:[{price:535}]},
+        {name:'Корралехо Бланко', variants:[{price:580}]},
+      ]} ]},
+      { title:'Абсент', groups:[ { items:[
+        {name:'Блэк Фримен', variants:[{price:190}]},
+        {name:'Ксенто Абсент', variants:[{price:795}]},
+      ]} ]},
+      { title:'Ликёр, бальзам, аперитив', groups:[ { items:[
+        {name:'Амаретто Деликато', tag:'22°', variants:[{price:115}]},
+        {name:'Альтер Юрген', tag:'35°', variants:[{price:175}]},
+        {name:'Воларе Эспрессо', tag:'20°', variants:[{price:240}]},
+        {name:'Воларе Трипл Сек', tag:'38°', variants:[{price:265}]},
+        {name:'Мартини', tag:'в асс.', variants:[{price:290}]},
+        {name:'Блю Кюрасау', tag:'22°', variants:[{price:295}]},
+        {name:'Бехеровка', tag:'38°', variants:[{price:370}]},
+        {name:'Бейлиз', tag:'17°', variants:[{price:380}]},
+        {name:'Кампари', tag:'25°', variants:[{price:390}]},
+        {name:'Апероль', tag:'11°', variants:[{price:390}]},
+        {name:'Драмбуй', tag:'40°', variants:[{price:430}]},
+        {name:'Рижский бальзам', tag:'45°', variants:[{price:485}]},
+        {name:'Ягермайстер', tag:'оригинал', variants:[{price:495}]},
+        {name:'Ягермайстер', tag:'оранж', variants:[{price:370}]},
+      ]} ]},
+      { title:'Прочее', groups:[ { items:[
+        {name:'Соджу', tag:'корейская водка', variants:[{price:400}]},
+      ]} ]},
+    ]
+  },
+  {
+    id:'cocktails', label:'Коктейли',
+    sections:[
+      { title:'Коктейли', groups:[ { items:[
+        {name:'Глинтвейн', desc:'красное вино, специи', variants:[{label:'300мл',price:400}]},
+        {name:'Апероль', desc:'апероль, игристое', variants:[{label:'250мл',price:950}]},
+        {name:'Чёрная кровь', desc:'ягермайстер, блю кюрасау, содовая', variants:[{label:'100мл',price:500}]},
+        {name:'Голубая лагуна', desc:'водка, блю кюрасау, лаймон фреш', variants:[{label:'175мл',price:400}]},
+        {name:'Ром-кола', desc:'белый ром, кола', variants:[{label:'300мл',price:450}]},
+        {name:'Белый русский', desc:'кофейный ликёр, водка, сливки', variants:[{label:'100мл',price:400}]},
+        {name:'Дайкири', desc:'белый ром, сок лайма, сироп', variants:[{label:'110мл',price:400}]},
+        {name:'Джин-тоник', desc:'джин, тоник', variants:[{label:'200мл',price:550}]},
+        {name:'Маргарита', desc:'текила, ликёр трипл сек, сок лайма, сироп', variants:[{label:'120мл',price:650}]},
+        {name:'Негрони', desc:'джин, вермут, битер кампари', variants:[{label:'90мл',price:700}]},
+      ]} ]},
+    ]
+  },
+  {
+    id:'snacks', label:'Закуски',
+    sections:[
+      { title:'Закуски', groups:[ { items:[
+        {name:'Чебурек с картошкой и грибами', variants:[{price:120}]},
+        {name:'Сухарики с чесноком', variants:[{price:150}]},
+        {name:'Картофель фри', variants:[{price:200}]},
+        {name:'Наггетсы куриные', variants:[{price:250}]},
+        {name:'Чебурек с мясом', variants:[{price:190}]},
+        {name:'Луковые кольца с соусом', variants:[{price:210}]},
+        {name:'Картофель фри с сосиской', variants:[{price:300}]},
+        {name:'Кольца кальмаров с соусом', variants:[{price:350}]},
+        {name:'Крокеты картофельные с сыром', variants:[{price:350}]},
+        {name:'Креветки хрустящие с соусом', variants:[{price:550}]},
+      ]} ]},
+      { title:'Снеки', groups:[ { items:[
+        {name:'Арахис солёный', variants:[{price:230}]},
+        {name:'Чипсы Lay\'s', tag:'малая', variants:[{price:250}]},
+        {name:'Чипсы Lay\'s', tag:'большая', variants:[{price:350}]},
+        {name:'Фисташки', variants:[{price:680}]},
+      ]} ]},
+    ]
+  },
+  {
+    id:'drinks', label:'Напитки',
+    sections:[
+      { title:'Напитки', groups:[ { items:[
+        {name:'Сок', tag:'200мл', variants:[{price:65}]},
+        {name:'Джамбо кола', variants:[{price:150}]},
+        {name:'Лаймон фреш', variants:[{price:180}]},
+        {name:'Пепси', tag:'0,33', variants:[{price:185}]},
+        {name:'Энергетик', variants:[{price:200}]},
+        {name:'Холодный чай', variants:[{price:200}]},
+        {name:'Тоник', variants:[{price:260}]},
+        {name:'Пепси', tag:'1л', variants:[{price:280}]},
+        {name:'Кока-кола', variants:[{price:620}]},
+      ]} ]},
+      { title:'Смузи и коктейли (б/а)', groups:[ { items:[
+        {name:'Мохито', tag:'безалкогольный', variants:[{price:140}]},
+        {name:'Облепиховый смузи', variants:[{price:150}]},
+        {name:'Клубничный смузи', variants:[{price:150}]},
+      ]} ]},
+      { title:'Молочный коктейль', groups:[ { items:[
+        {name:'Молочный коктейль', tag:'ваниль / шоколад / банан / клубника', variants:[{label:'300мл',price:230}]},
+      ]} ]},
+    ]
+  },
+  {
+    id:'hot', label:'Чай и вода',
+    sections:[
+      { title:'Горячие напитки', groups:[ { items:[
+        {name:'Горячий шоколад', variants:[{price:80}]},
+        {name:'Эспрессо', variants:[{price:90}]},
+        {name:'Американо', variants:[{price:90}]},
+        {name:'Капучино', tag:'маленький', variants:[{price:110}]},
+        {name:'Капучино', tag:'большой', variants:[{price:220}]},
+        {name:'Чай чёрный', variants:[{price:180}]},
+        {name:'Чай зелёный', variants:[{price:180}]},
+        {name:'Иван-чай', variants:[{price:180}]},
+        {name:'Чай травяной', variants:[{price:250}]},
+        {name:'Облепиховый чай', variants:[{price:250}]},
+      ]} ]},
+      { title:'Вода', groups:[ { items:[
+        {name:'Тасай', tag:'1л', variants:[{price:140}]},
+        {name:'Тасай', tag:'стекло', variants:[{price:150}]},
+        {name:'Тасай', tag:'лимон', variants:[{price:150}]},
+      ]} ]},
+    ]
+  },
+];
+
+/* ============ РЕНДЕР ============ */
 (function(){
-  var deck = document.getElementById('deck');
-  var pages = Array.prototype.slice.call(deck.querySelectorAll('.page'));
-  var dotsWrap = document.getElementById('dots');
-  var counter = document.getElementById('counter');
-  var hint = document.getElementById('hint');
-  var prevBtn = document.getElementById('prev');
-  var nextBtn = document.getElementById('next');
-  var current = 0;
-  var interacted = false;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tabbar = document.getElementById('tabbar');
+  const deck = document.getElementById('deck');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  pages.forEach(function(_, i){
-    var d = document.createElement('button');
-    d.className = 'dot';
-    d.setAttribute('aria-label', 'Страница ' + (i+1));
-    d.addEventListener('click', function(){ goTo(i); });
-    dotsWrap.appendChild(d);
+  function fmt(n){ return n.toLocaleString('ru-RU') + ' ₽'; }
+
+  function renderItem(item){
+    const row = document.createElement('div');
+    row.className = 'item-row';
+
+    const main = document.createElement('div');
+    main.className = 'item-main';
+    const nameLine = document.createElement('span');
+    nameLine.className = 'item-name';
+    nameLine.textContent = item.name;
+    main.appendChild(nameLine);
+    if (item.tag){
+      const tag = document.createElement('span');
+      tag.className = 'item-tag';
+      tag.textContent = item.tag;
+      main.appendChild(tag);
+    }
+    if (item.desc){
+      const desc = document.createElement('div');
+      desc.className = 'item-desc';
+      desc.textContent = item.desc;
+      main.appendChild(desc);
+    }
+    row.appendChild(main);
+
+    if (item.variants.length <= 1){
+      const leader = document.createElement('div');
+      leader.className = 'item-leader';
+      row.appendChild(leader);
+      const price = document.createElement('div');
+      price.className = 'price-single';
+      price.textContent = fmt(item.variants[0].price);
+      row.appendChild(price);
+    } else {
+      const stack = document.createElement('div');
+      stack.className = 'price-stack';
+      item.variants.forEach(v => {
+        const line = document.createElement('div');
+        line.className = 'price-line';
+        if (v.label){
+          const vol = document.createElement('span');
+          vol.className = 'vol';
+          vol.textContent = v.label;
+          line.appendChild(vol);
+        }
+        const amt = document.createElement('span');
+        amt.textContent = fmt(v.price);
+        line.appendChild(amt);
+        stack.appendChild(line);
+      });
+      row.appendChild(stack);
+    }
+    return row;
+  }
+
+  function renderSection(section, sectionId){
+    const sec = document.createElement('section');
+    sec.className = 'menu-section';
+    sec.id = sectionId;
+
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.textContent = section.title;
+    sec.appendChild(title);
+
+    section.groups.forEach(group => {
+      if (group.label){
+        const gl = document.createElement('div');
+        gl.className = 'group-label';
+        gl.textContent = group.label;
+        sec.appendChild(gl);
+      }
+      const items = document.createElement('div');
+      items.className = 'items';
+      group.items.forEach(it => items.appendChild(renderItem(it)));
+      sec.appendChild(items);
+    });
+
+    return sec;
+  }
+
+  function buildPanel(tab){
+    const panel = document.createElement('div');
+    panel.className = 'panel';
+    panel.id = 'panel-' + tab.id;
+
+    if (tab.note){
+      const note = document.createElement('p');
+      note.className = 'tab-note';
+      note.textContent = tab.note;
+      panel.appendChild(note);
+    }
+
+    let subbar = null;
+    if (tab.sections.length > 1){
+      subbar = document.createElement('div');
+      subbar.className = 'subbar';
+      panel.appendChild(subbar);
+    }
+
+    const subChips = [];
+    tab.sections.forEach((section, i) => {
+      const sectionId = tab.id + '-sec-' + i;
+      const secEl = renderSection(section, sectionId);
+      panel.appendChild(secEl);
+
+      if (subbar){
+        const chip = document.createElement('button');
+        chip.className = 'sub-chip';
+        chip.textContent = section.title;
+        chip.addEventListener('click', () => {
+          secEl.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+        subbar.appendChild(chip);
+        subChips.push({chip, el: secEl});
+      }
+    });
+
+    if (subbar && subChips.length){
+      subChips[0].chip.classList.add('active');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting){
+            const match = subChips.find(s => s.el === entry.target);
+            if (match){
+              subChips.forEach(s => s.chip.classList.remove('active'));
+              match.chip.classList.add('active');
+            }
+          }
+        });
+      }, { root: panel, rootMargin: '0px 0px -70% 0px', threshold: 0 });
+      subChips.forEach(s => io.observe(s.el));
+    }
+
+    return panel;
+  }
+
+  const tabChips = [];
+  const panels = [];
+  MENU.forEach((tab, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'tab-chip';
+    chip.textContent = tab.label;
+    chip.addEventListener('click', () => goToTab(i));
+    tabbar.appendChild(chip);
+    tabChips.push(chip);
+
+    const panel = buildPanel(tab);
+    deck.appendChild(panel);
+    panels.push(panel);
   });
-  var dots = Array.prototype.slice.call(dotsWrap.children);
 
-  function markInteracted(){
-    if (interacted) return;
-    interacted = true;
-    hint.classList.add('hidden');
+  let current = 0;
+  function setActiveTab(index){
+    if (index === current) { tabChips[index].classList.add('active'); }
+    current = index;
+    tabChips.forEach((c, i) => c.classList.toggle('active', i === index));
+    const activeChip = tabChips[index];
+    activeChip.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  function updateChrome(index){
-    dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
-    var total = pages.length;
-    counter.innerHTML = '<b>' + String(index+1).padStart(2,'0') + '</b> / ' + String(total).padStart(2,'0');
-    prevBtn.disabled = index === 0;
-    nextBtn.disabled = index === total - 1;
+  function goToTab(index){
+    index = Math.max(0, Math.min(panels.length - 1, index));
+    panels[index].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  function goTo(index){
-    index = Math.max(0, Math.min(pages.length - 1, index));
-    markInteracted();
-    pages[index].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-  }
-
-  prevBtn.addEventListener('click', function(){ goTo(current - 1); });
-  nextBtn.addEventListener('click', function(){ goTo(current + 1); });
-
-  window.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowRight') goTo(current + 1);
-    if (e.key === 'ArrowLeft') goTo(current - 1);
-  });
-
-  var ticking = false;
-  function onScroll(){
-    markInteracted();
+  let ticking = false;
+  function onDeckScroll(){
     if (!ticking){
-      requestAnimationFrame(function(){
-        applyTilt();
+      requestAnimationFrame(() => {
+        const deckRect = deck.getBoundingClientRect();
+        const centerX = deckRect.left + deckRect.width / 2;
+        let closestIndex = 0, closestDist = Infinity;
+        panels.forEach((p, i) => {
+          const r = p.getBoundingClientRect();
+          const c = r.left + r.width / 2;
+          const d = Math.abs(c - centerX);
+          if (!reduceMotion){
+            const norm = Math.max(-1, Math.min(1, (c - centerX) / deckRect.width));
+            p.style.opacity = String(Math.max(0.5, 1 - Math.abs(norm) * 0.6));
+          }
+          if (d < closestDist){ closestDist = d; closestIndex = i; }
+        });
+        if (closestIndex !== current) setActiveTab(closestIndex);
         ticking = false;
       });
       ticking = true;
     }
   }
+  deck.addEventListener('scroll', onDeckScroll, {passive:true});
 
-  function applyTilt(){
-    var deckRect = deck.getBoundingClientRect();
-    var centerX = deckRect.left + deckRect.width / 2;
-    var closestIndex = 0;
-    var closestDist = Infinity;
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goToTab(current + 1);
+    if (e.key === 'ArrowLeft') goToTab(current - 1);
+  });
 
-    pages.forEach(function(page, i){
-      var img = page.querySelector('img');
-      var rect = page.getBoundingClientRect();
-      var pageCenter = rect.left + rect.width / 2;
-      var dist = pageCenter - centerX;
-      var norm = Math.max(-1, Math.min(1, dist / deckRect.width));
-
-      if (!reduceMotion){
-        var rotate = norm * -13;
-        var scale = 1 - Math.abs(norm) * 0.13;
-        var opacity = 1 - Math.abs(norm) * 0.4;
-        img.style.transform = 'rotateY(' + rotate + 'deg) scale(' + scale + ')';
-        img.style.opacity = String(Math.max(0.55, opacity));
-      }
-
-      if (Math.abs(dist) < closestDist){
-        closestDist = Math.abs(dist);
-        closestIndex = i;
-      }
-    });
-
-    if (closestIndex !== current){
-      current = closestIndex;
-      updateChrome(current);
-    }
-  }
-
-  deck.addEventListener('scroll', onScroll, {passive:true});
-  deck.addEventListener('touchstart', markInteracted, {passive:true});
-  window.addEventListener('resize', applyTilt);
-
-  setTimeout(function(){ hint.classList.add('hidden'); }, 4200);
-
-  updateChrome(0);
-  applyTilt();
+  setActiveTab(0);
 })();
 </script>
 </body>
